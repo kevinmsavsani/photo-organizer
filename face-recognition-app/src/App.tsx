@@ -8,7 +8,7 @@ const App = () => {
   const [results, setResults] = useState([]);
   const [message, setMessage] = useState('');
 
-  const onDrop = (acceptedFiles) => {
+  const onDrop = (acceptedFiles: any) => {
     setFiles(acceptedFiles);
   };
 
@@ -16,7 +16,7 @@ const App = () => {
     onDrop,
     accept: 'image/*',
     maxFiles: 10,
-  });
+  } as any);
 
   const handleTrain = async () => {
     const formData = new FormData();
@@ -78,7 +78,7 @@ const App = () => {
       <div className="mt-4">
         <h2>Results</h2>
         <ul className="list-group">
-          {results.map((result, index) => (
+          {results.map((result: any, index) => (
             <li key={index} className="list-group-item">
               {result.filename}: {result.name}
             </li>

@@ -76,7 +76,8 @@ def recognize():
             results.append(image_results)
         except Exception as e:
             print(f"Error processing {file.filename}: {e}")
-
+    
+    print(results[0])
     return jsonify(results[0])
 
 @app.route('/uploads/<filename>')
