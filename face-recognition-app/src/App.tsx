@@ -56,7 +56,7 @@ const App = () => {
   }, [files]);
 
   return (
-    <div className="container mt-5">
+    <div className="flex items-center justify-center container mt-5">
       <h1>Face Recognition App</h1>
       <div {...getRootProps({ className: 'dropzone' })} style={{ border: '2px dashed #ccc', padding: '20px', textAlign: 'center' }}>
         <input {...getInputProps()} />
