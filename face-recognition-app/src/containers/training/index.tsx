@@ -5,14 +5,14 @@ import TrainingSection from './TrainingSection';
 import { toast } from 'react-toastify';
 
 const Training = () => {
-  const [trainingImages, setTrainingImages] = useState<string[]>([]);
-  const [selectedTrainingFiles, setSelectedTrainingFiles] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchFiles = async () => {
       try {
         const trainResponse = await axios.get<string[]>('http://127.0.0.1:5001/files/recognized');
-        setTrainingImages(trainResponse.data);
+        setImages(trainResponse.data);
         toast.success('Trained successfully');
       } catch (error) {
         console.error('Error fetching files:', error);
@@ -26,9 +26,9 @@ const Training = () => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
 
-    setSelectedTrainingFiles(prev => {
+    setSelectedFiles(prev => {
       if (checked) {
-        return [...prev, value];
+        return [...new Set([...prev, value])];
       } else {
         return prev.filter(file => file !== value);
       }
@@ -37,7 +37,7 @@ const Training = () => {
 
   const handleTrain = async () => {
     try {
-      const response = await axios.post<{ message: string }>('http://127.0.0.1:5001/train', selectedTrainingFiles, {
+      const response = await axios.post<{ message: string }>('http://127.0.0.1:5001/train', selectedFiles, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -48,11 +48,10 @@ const Training = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h1>Training</h1>
+    <div className="flex flex-col gap-2 ">
       <FileSelector 
-        trainingImages={trainingImages}
-        selectedTrainingFiles={selectedTrainingFiles}
+        images={images}
+        selectedFiles={selectedFiles}
         handleFileSelect={handleFileSelect}
       />
       <TrainingSection

@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { CustomButton } from "../../components/Button";
 
 interface TrainingSectionProps {
   handleTrain: () => void;
@@ -7,8 +8,9 @@ interface TrainingSectionProps {
 const TrainingSection: React.FC<TrainingSectionProps> = ({ handleTrain }) => {
   return (
     <div className="mt-4">
-      <h2>Training</h2>
-      <button className="btn btn-primary mt-3" onClick={handleTrain}>Train Model</button>
+      <CustomButton variant="primary" onClick={handleTrain}>
+        Train Model
+      </CustomButton>
     </div>
   );
 };

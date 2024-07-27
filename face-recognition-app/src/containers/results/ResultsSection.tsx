@@ -11,7 +11,7 @@ interface ResultsSectionProps {
 
 const ResultsSection: React.FC<ResultsSectionProps> = ({ results }) => {
   return (
-    <div className="mt-4">
+    <div className="mt-4 font-bold">
       <h2>Recognition Results</h2>
       <ul className="list-group">
         {results.map((result, index) => (

@@ -34,7 +34,7 @@ const Results = () => {
 
     setSelectedFiles(prev => {
       if (checked) {
-        return [...prev, value];
+        return [...new Set([...prev, value])];
       } else {
         return prev.filter(file => file !== value);
       }
@@ -57,7 +57,6 @@ const Results = () => {
 
   return (
     <div className="container mt-5">
-      <h1>Recognition</h1>
       <FileSelector 
         images={images}
         selectedFiles={selectedFiles}

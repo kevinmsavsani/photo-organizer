@@ -1,14 +1,18 @@
-import React from 'react';
+import React from "react";
+import { CustomButton } from "../../components/Button";
 
 interface RecognitionSectionProps {
   handleRecognize: () => void;
 }
 
-const RecognitionSection: React.FC<RecognitionSectionProps> = ({ handleRecognize }) => {
+const RecognitionSection: React.FC<RecognitionSectionProps> = ({
+  handleRecognize,
+}) => {
   return (
     <div className="mt-4">
-      <h2>Recognition</h2>
-      <button className="btn btn-success mt-3" onClick={handleRecognize}>Recognize Faces</button>
+      <CustomButton variant="primary" onClick={handleRecognize}>
+        Recognize Faces
+      </CustomButton>
     </div>
   );
 };
