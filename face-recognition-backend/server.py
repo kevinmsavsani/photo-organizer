@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 import face_recognition
 import pickle
+import csv
 
 app = Flask(__name__)
 CORS(app)
@@ -10,6 +11,7 @@ CORS(app)
 RECOGNIZING_FOLDER = '../faces/recognizing'
 TRAINING_FOLDER = '../faces/training'
 DATABASE_PATH = '../faces/database.pkl'
+RECOGNITION_RESULTS_CSV = '../faces/recognition_results.csv'
 
 # Ensure directories exist
 os.makedirs(RECOGNIZING_FOLDER, exist_ok=True)
@@ -24,6 +26,15 @@ def load_database():
 def save_database(database):
     with open(DATABASE_PATH, 'wb') as f:
         pickle.dump(database, f)
+
+def save_recognition_results(results):
+    with open(RECOGNITION_RESULTS_CSV, 'w', newline='') as csvfile:
+        fieldnames = ['filename', 'name']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for result in results:
+            for name in result['names']:
+                writer.writerow({'filename': result['filename'], 'name': name})
 
 @app.route('/train', methods=['POST'])
 def train():
@@ -95,12 +106,9 @@ def recognize():
                 'filename': filename,
                 'names': []  # No names found due to processing error
             })
-
+    
+    save_recognition_results(results)
     return jsonify(results)
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(RECOGNIZING_FOLDER, filename)
 
 @app.route('/files/<folder>', methods=['GET'])
 def list_files(folder):
@@ -115,6 +123,15 @@ def list_files(folder):
 @app.route('/files/<folder>/<filename>', methods=['GET'])
 def get_file(folder, filename):
     return send_from_directory(os.path.join('../faces', folder), filename)
+
+@app.route('/recognition_results', methods=['GET'])
+def get_recognition_results():
+    results = []
+    if os.path.exists(RECOGNITION_RESULTS_CSV):
+        with open(RECOGNITION_RESULTS_CSV, mode='r') as csvfile:
+            reader = csv.DictReader(csvfile)
+            results = list(reader)
+    return jsonify(results)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
