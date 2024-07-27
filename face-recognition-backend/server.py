@@ -27,15 +27,6 @@ def save_database(database):
     with open(DATABASE_PATH, 'wb') as f:
         pickle.dump(database, f)
 
-def save_recognition_results(results):
-    with open(RECOGNITION_RESULTS_CSV, 'w', newline='') as csvfile:
-        fieldnames = ['filename', 'name']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for result in results:
-            for name in result['names']:
-                writer.writerow({'filename': result['filename'], 'name': name})
-
 @app.route('/train', methods=['POST'])
 def train():
     database = load_database()
@@ -69,8 +60,29 @@ def recognize():
     database = load_database()
     filenames = request.get_json()  # Get the list of filenames from the request
     results = []
+    existing_results = {}
+
+    # Load existing recognition results from CSV
+    if os.path.exists(RECOGNITION_RESULTS_CSV):
+        with open(RECOGNITION_RESULTS_CSV, mode='r') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                filename = row['filename']
+                name = row['name']
+                if filename in existing_results:
+                    existing_results[filename].append(name)
+                else:
+                    existing_results[filename] = [name]
 
     for filename in filenames:
+        # Check if the result already exists in CSV
+        if filename in existing_results:
+            results.append({
+                'filename': filename,
+                'names': existing_results[filename]
+            })
+            continue
+
         file_path = os.path.join(RECOGNIZING_FOLDER, filename)
         
         if not os.path.exists(file_path):
@@ -107,7 +119,15 @@ def recognize():
                 'names': []  # No names found due to processing error
             })
     
-    save_recognition_results(results)
+    # Save new recognition results to CSV
+    with open(RECOGNITION_RESULTS_CSV, 'a', newline='') as csvfile:
+        fieldnames = ['filename', 'name']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        for result in results:
+            if result['filename'] not in existing_results:  # Only save new results
+                for name in result['names']:
+                    writer.writerow({'filename': result['filename'], 'name': name})
+
     return jsonify(results)
 
 @app.route('/files/<folder>', methods=['GET'])
