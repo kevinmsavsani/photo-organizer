@@ -11,7 +11,7 @@ const Training = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const trainResponse = await axios.get<string[]>('http://127.0.0.1:5001/files/recognized');
+        const trainResponse = await axios.get<string[]>('http://127.0.0.1:5001/files/training');
         setImages(trainResponse.data);
         toast.success('Trained successfully');
       } catch (error) {

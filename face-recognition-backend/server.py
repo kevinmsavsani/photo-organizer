@@ -7,13 +7,13 @@ import pickle
 app = Flask(__name__)
 CORS(app)
 
-UPLOAD_FOLDER = '../faces/uploads'
-RECOGNIZED_FOLDER = '../faces/recognized'
+RECOGNIZING_FOLDER = '../faces/recognizing'
+TRAINING_FOLDER = '../faces/training'
 DATABASE_PATH = '../faces/database.pkl'
 
 # Ensure directories exist
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(RECOGNIZED_FOLDER, exist_ok=True)
+os.makedirs(RECOGNIZING_FOLDER, exist_ok=True)
+os.makedirs(TRAINING_FOLDER, exist_ok=True)
 
 def load_database():
     if os.path.exists(DATABASE_PATH):
@@ -31,7 +31,7 @@ def train():
     filenames = request.get_json()  # Get the list of filenames from the request
     
     for filename in filenames:
-        file_path = os.path.join(RECOGNIZED_FOLDER, filename)
+        file_path = os.path.join(TRAINING_FOLDER, filename)
         
         if not os.path.exists(file_path):
             print(f"File {filename} does not exist in the recognized folder.")
@@ -60,7 +60,7 @@ def recognize():
     results = []
 
     for filename in filenames:
-        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file_path = os.path.join(RECOGNIZING_FOLDER, filename)
         
         if not os.path.exists(file_path):
             print(f"File {filename} does not exist in the upload folder.")
@@ -100,7 +100,7 @@ def recognize():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    return send_from_directory(RECOGNIZING_FOLDER, filename)
 
 @app.route('/files/<folder>', methods=['GET'])
 def list_files(folder):

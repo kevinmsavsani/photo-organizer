@@ -20,6 +20,13 @@ function MainLayout() {
             Training
           </Link>
           <Link
+            key="recognition"
+            to="/recognition"
+            className="text-white hover:text-gray-300 font-bold text-xl"
+          >
+            Recognition
+          </Link>
+          <Link
             key="results"
             to="/results"
             className="text-white hover:text-gray-300 font-bold text-xl"
