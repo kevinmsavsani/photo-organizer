@@ -1,7 +1,8 @@
 venv
 face-recognition-app/node_modules
 uploads
-face_encodings.pkl
+faces
+database.pkl
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
