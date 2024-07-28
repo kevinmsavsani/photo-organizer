@@ -144,6 +144,27 @@ def list_files(folder):
 def get_file(folder, filename):
     return send_from_directory(os.path.join('../faces', folder), filename)
 
+BASE_DIR = os.path.abspath('../faces')
+
+@app.route('/recognition_results/files', methods=['POST'])
+def post_file():
+    data = request.json
+    folder = data.get('folder')
+    filename = data.get('filename')
+    
+    if not folder or not filename:
+        return jsonify({"error": "Folder and filename are required"}), 400
+
+    file_path = os.path.join(BASE_DIR, folder, filename)
+
+    if not os.path.exists(file_path):
+        return jsonify({"error": "File not found"}), 404
+
+    try:
+        return send_from_directory(os.path.join(BASE_DIR, folder), filename)
+    except FileNotFoundError:
+        return jsonify({"error": "File not found"}), 404
+
 @app.route('/recognition_results', methods=['GET'])
 def get_recognition_results():
     results = []

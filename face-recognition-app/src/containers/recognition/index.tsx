@@ -52,7 +52,7 @@ const Results = () => {
           file.name.toLowerCase().endsWith(".jpeg") ||
           file.name.toLowerCase().endsWith(".png")
       )
-      .map((file) => file.name);
+      .map((file) => file.webkitRelativePath);
 
     setImages(validFiles);
   };
