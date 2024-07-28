@@ -151,6 +151,22 @@ def list_files(folder):
 def get_file(folder, filename):
     return send_from_directory(os.path.join('../faces', folder), filename)
 
+@app.route('/files/<folder1>/<folder2>/<filename>', methods=['GET'])
+def get_folder_file(folder1, folder2, filename):
+    return send_from_directory(os.path.join('../faces', folder1, folder2), filename)
+
+@app.route('/files/<folder1>/<folder2>/<folder3>/<filename>', methods=['GET'])
+def get_double_folder_file(folder1, folder2, folder3, filename):
+    return send_from_directory(os.path.join('../faces', folder1, folder2, folder3), filename)
+
+@app.route('/files/<folder1>/<folder2>/<folder3>/<folder4>/<filename>', methods=['GET'])
+def get_double_folder_file(folder1, folder2, folder3, folder4, filename):
+    return send_from_directory(os.path.join('../faces', folder1, folder2, folder3, folder4), filename)
+
+@app.route('/files/<folder1>/<folder2>/<folder3>/<folder4>/<folder5>/<filename>', methods=['GET'])
+def get_double_folder_file(folder1, folder2, folder3, folder4, folder5, filename):
+    return send_from_directory(os.path.join('../faces', folder1, folder2, folder3, folder4, folder5), filename)
+
 BASE_DIR = os.path.abspath('../faces')
 
 @app.route('/recognition_results/files', methods=['POST'])
