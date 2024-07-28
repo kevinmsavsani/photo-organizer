@@ -48,9 +48,9 @@ const Results = () => {
     const validFiles = files
       .filter(
         (file) =>
-          file.name.endsWith(".jpg") ||
-          file.name.endsWith(".jpeg") ||
-          file.name.endsWith(".png")
+          file.name.toLowerCase().endsWith(".jpg") ||
+          file.name.toLowerCase().endsWith(".jpeg") ||
+          file.name.toLowerCase().endsWith(".png")
       )
       .map((file) => file.name);
 
