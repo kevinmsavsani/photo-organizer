@@ -45,7 +45,7 @@ def train():
             encs = face_recognition.face_encodings(image, known_face_locations=locs)
 
             if encs:
-                name = os.path.splitext(filename)[0].split('-')[0]
+                name = os.path.splitext(filename)[0].split('-')[0].lower()
                 database['encs'].extend(encs)
                 database['names'].extend([name] * len(encs))
                 print(f"Added {name} with {len(encs)} encodings.")
