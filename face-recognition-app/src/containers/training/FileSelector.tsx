@@ -1,21 +1,21 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 
 interface FileSelectorProps {
   images: string[];
   selectedFiles: string[];
-  handleFileSelect: (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => void;
+  handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFolderSelect: any
 }
 
 const FileSelector: React.FC<FileSelectorProps> = ({
   images,
   selectedFiles,
   handleFileSelect,
+  handleFolderSelect
 }) => {
   const [selectAll, setSelectAll] = useState(false);
 
-  // Effect to update the selectAll state based on selectedFiles
   useEffect(() => {
     if (images.length > 0) {
       setSelectAll(selectedFiles.length === images.length);
@@ -28,12 +28,11 @@ const FileSelector: React.FC<FileSelectorProps> = ({
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
 
-    // Create a synthetic event to handle multiple file selections
     const syntheticEvent = {
       target: {
-        value: '',
+        value: "",
         checked: isChecked,
-      }
+      },
     } as React.ChangeEvent<HTMLInputElement>;
 
     images.forEach((file) => {
@@ -48,6 +47,12 @@ const FileSelector: React.FC<FileSelectorProps> = ({
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
+      <input
+        type="file"
+        webkitdirectory="true"
+        onChange={handleFolderSelect}
+        className="border p-2 rounded"
+      />
       <h2 className="text-xl font-semibold mb-4">Select Images for Training</h2>
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">

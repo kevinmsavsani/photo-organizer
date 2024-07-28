@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import FileSelector from './FileSelector';
-import RecognitionSection from './RecognitionSection';
-import ResultsSection from './ResultsSection';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import FileSelector from "./FileSelector";
+import RecognitionSection from "./RecognitionSection";
+import ResultsSection from "./ResultsSection";
+import { toast } from "react-toastify";
 
 interface FileResult {
   filename: string;
@@ -18,11 +18,13 @@ const Results = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const recognizeResponse = await axios.get<string[]>('http://127.0.0.1:5001/files/recognizing');
+        const recognizeResponse = await axios.get<string[]>(
+          "http://127.0.0.1:5001/files/recognizing"
+        );
         setImages(recognizeResponse.data);
       } catch (error) {
-        console.error('Error fetching files:', error);
-        toast.error('Failed to fetch images. Check console for details.');
+        console.error("Error fetching files:", error);
+        toast.error("Failed to fetch images. Check console for details.");
       }
     };
 
@@ -32,39 +34,56 @@ const Results = () => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
 
-    setSelectedFiles(prev => {
+    setSelectedFiles((prev) => {
       if (checked) {
         return [...new Set([...prev, value])];
       } else {
-        return prev.filter(file => file !== value);
+        return prev.filter((file) => file !== value);
       }
     });
   };
 
+  const handleFolderSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const validFiles = files
+      .filter(
+        (file) =>
+          file.name.endsWith(".jpg") ||
+          file.name.endsWith(".jpeg") ||
+          file.name.endsWith(".png")
+      )
+      .map((file) => file.name);
+
+    setImages(validFiles);
+  };
+
   const handleRecognize = async () => {
     try {
-      const response = await axios.post<FileResult[]>('http://127.0.0.1:5001/recognize', selectedFiles, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post<FileResult[]>(
+        "http://127.0.0.1:5001/recognize",
+        selectedFiles,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setResults(response.data);
     } catch (error) {
-      console.error('Error during recognition:', error);
-      toast.error('Recognition failed. Check console for details.');
+      console.error("Error during recognition:", error);
+      toast.error("Recognition failed. Check console for details.");
     }
   };
 
   return (
     <div className="container mt-5">
-      <FileSelector 
+      <FileSelector
         images={images}
         selectedFiles={selectedFiles}
+        handleFolderSelect={handleFolderSelect}
         handleFileSelect={handleFileSelect}
       />
-      <RecognitionSection
-        handleRecognize={handleRecognize}
-      />
+      <RecognitionSection handleRecognize={handleRecognize} />
       <ResultsSection results={results} />
     </div>
   );

@@ -7,7 +7,7 @@ import {
 import Home from './containers/home'
 import MainLayout from './layouts/MainLayout'
 import Training from './containers/training'
-import Results from './containers/results'
+import Results from './containers/recognition'
 import RecognitionResults from './containers/results'
 
 const App = () => {

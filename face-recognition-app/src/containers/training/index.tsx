@@ -35,6 +35,17 @@ const Training = () => {
     });
   };
 
+  const handleFolderSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const validFiles = files.filter(file => 
+      file.name.endsWith('.jpg') || 
+      file.name.endsWith('.jpeg') || 
+      file.name.endsWith('.png')
+    ).map(file => file.name);
+
+    setImages(validFiles);
+  };
+
   const handleTrain = async () => {
     try {
       const response = await axios.post<{ message: string }>('http://127.0.0.1:5001/train', selectedFiles, {
@@ -52,6 +63,7 @@ const Training = () => {
       <FileSelector 
         images={images}
         selectedFiles={selectedFiles}
+        handleFolderSelect={handleFolderSelect}
         handleFileSelect={handleFileSelect}
       />
       <TrainingSection

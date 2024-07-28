@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 
 interface FileSelectorProps {
@@ -6,12 +7,14 @@ interface FileSelectorProps {
   handleFileSelect: (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => void;
+  handleFolderSelect: any;
 }
 
 const FileSelector: React.FC<FileSelectorProps> = ({
   images,
   selectedFiles,
   handleFileSelect,
+  handleFolderSelect
 }) => {
   const [selectAll, setSelectAll] = useState(false);
 
@@ -48,6 +51,12 @@ const FileSelector: React.FC<FileSelectorProps> = ({
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
+      <input
+        type="file"
+        webkitdirectory="true"
+        onChange={handleFolderSelect}
+        className="border p-2 rounded"
+      />
       <h2 className="text-xl font-semibold mb-4">Select Images for Recognition</h2>
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
