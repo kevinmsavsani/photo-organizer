@@ -160,11 +160,11 @@ def get_double_folder_file(folder1, folder2, folder3, filename):
     return send_from_directory(os.path.join('../faces', folder1, folder2, folder3), filename)
 
 @app.route('/files/<folder1>/<folder2>/<folder3>/<folder4>/<filename>', methods=['GET'])
-def get_double_folder_file(folder1, folder2, folder3, folder4, filename):
+def get_third_folder_file(folder1, folder2, folder3, folder4, filename):
     return send_from_directory(os.path.join('../faces', folder1, folder2, folder3, folder4), filename)
 
 @app.route('/files/<folder1>/<folder2>/<folder3>/<folder4>/<folder5>/<filename>', methods=['GET'])
-def get_double_folder_file(folder1, folder2, folder3, folder4, folder5, filename):
+def get_fourth_folder_file(folder1, folder2, folder3, folder4, folder5, filename):
     return send_from_directory(os.path.join('../faces', folder1, folder2, folder3, folder4, folder5), filename)
 
 BASE_DIR = os.path.abspath('../faces')
