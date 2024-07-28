@@ -34,7 +34,7 @@ def train():
     
     for filename in filenames:
         file_path = os.path.join(TRAINING_FOLDER, filename)
-        
+
         if not os.path.exists(file_path):
             print(f"File {filename} does not exist in the recognized folder.")
             continue
@@ -45,7 +45,7 @@ def train():
             encs = face_recognition.face_encodings(image, known_face_locations=locs)
 
             if encs:
-                name = os.path.splitext(filename)[0]
+                name = os.path.splitext(filename)[0].split('-')[0]
                 database['encs'].extend(encs)
                 database['names'].extend([name] * len(encs))
                 print(f"Added {name} with {len(encs)} encodings.")
@@ -127,7 +127,6 @@ def recognize():
         fieldnames = ['filename', 'name']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         for result in results:
-            print(result['filename'], result['names'], existing_results, results)
             if result['filename'] not in existing_results:
                 if not result['names']:
                     writer.writerow({'filename': result['filename'], 'name': ''})
