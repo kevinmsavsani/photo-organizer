@@ -207,5 +207,14 @@ def get_recognition_results():
 
     return jsonify(valid_files)
 
+@app.route('/delete_db')
+def delete_db():
+    file_path = os.path.join('..', 'faces', 'database.pkl')
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return f"{file_path} has been deleted."
+    else:
+        return f"{file_path} does not exist."
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)

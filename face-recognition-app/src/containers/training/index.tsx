@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import FileSelector from "./FileSelector";
-import TrainingSection from "./TrainingSection";
 import { toast } from "react-toastify";
+import { CustomButton } from "../../components/Button";
 
 const Training = () => {
   const [images, setImages] = useState<string[]>([]);
@@ -67,6 +67,16 @@ const Training = () => {
     }
   };
 
+  const deleteTraining = async () => {
+    try {
+      const response = await axios.get<{ message: string }>(
+        "http://127.0.0.1:5001/delete_db"
+      );
+    } catch (error) {
+      console.error("Error during delete training:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2 ">
       <FileSelector
@@ -75,7 +85,14 @@ const Training = () => {
         handleFolderSelect={handleFolderSelect}
         handleFileSelect={handleFileSelect}
       />
-      <TrainingSection handleTrain={handleTrain} />
+      <div className="flex mt-4 gap-4">
+        <CustomButton variant="primary" onClick={handleTrain}>
+          Train Model
+        </CustomButton>
+        <CustomButton variant="primary" onClick={deleteTraining}>
+          Delete Training
+        </CustomButton>
+      </div>
     </div>
   );
 };
