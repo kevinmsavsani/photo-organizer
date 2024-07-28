@@ -179,7 +179,18 @@ def get_recognition_results():
         with open(RECOGNITION_RESULTS_CSV, mode='r') as csvfile:
             reader = csv.DictReader(csvfile)
             results = list(reader)
-    return jsonify(results)
+    
+    file_path = os.path.join(BASE_DIR)
+    valid_files = []
+
+    for result in results:
+        file_name = result.get('filename')
+        full_path = os.path.join(file_path, file_name)
+        if os.path.exists(full_path):
+            valid_files.append(result)
+
+
+    return jsonify(valid_files)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
