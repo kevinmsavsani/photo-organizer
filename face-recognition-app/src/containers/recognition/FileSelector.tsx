@@ -4,10 +4,8 @@ import React, { useEffect, useState } from "react";
 interface FileSelectorProps {
   images: string[];
   selectedFiles: string[];
-  handleFileSelect: (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => void;
-  handleFolderSelect: any;
+  handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFolderSelect: any
 }
 
 const FileSelector: React.FC<FileSelectorProps> = ({
@@ -18,7 +16,6 @@ const FileSelector: React.FC<FileSelectorProps> = ({
 }) => {
   const [selectAll, setSelectAll] = useState(false);
 
-  // Effect to update the selectAll state based on selectedFiles
   useEffect(() => {
     if (images.length > 0) {
       setSelectAll(selectedFiles.length === images.length);
@@ -31,12 +28,11 @@ const FileSelector: React.FC<FileSelectorProps> = ({
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
 
-    // Create a synthetic event to handle multiple file selections
     const syntheticEvent = {
       target: {
-        value: '',
+        value: "",
         checked: isChecked,
-      }
+      },
     } as React.ChangeEvent<HTMLInputElement>;
 
     images.forEach((file) => {
