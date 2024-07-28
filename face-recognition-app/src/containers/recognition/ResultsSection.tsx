@@ -18,7 +18,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ results }) => {
           <li key={index} className="list-group-item">
             {result.filename}: {result.names.join(', ')}
             <img
-              src={`http://127.0.0.1:5001/files/recognizing/${result.filename}`}
+              src={`http://127.0.0.1:5001/files/${result.filename}`}
               alt="result"
               className="img-thumbnail"
               style={{ width: '100px', height: '100px' }}

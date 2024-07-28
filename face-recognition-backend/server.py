@@ -58,11 +58,10 @@ def train():
 @app.route('/recognize', methods=['POST'])
 def recognize():
     database = load_database()
-    filenames = request.get_json()  # Get the list of filenames from the request
+    filenames = request.get_json()
     results = []
     existing_results = {}
 
-    # Load existing recognition results from CSV
     if os.path.exists(RECOGNITION_RESULTS_CSV):
         with open(RECOGNITION_RESULTS_CSV, mode='r') as csvfile:
             reader = csv.DictReader(csvfile)
@@ -73,9 +72,13 @@ def recognize():
                     existing_results[filename].append(name)
                 else:
                     existing_results[filename] = [name]
+    else:
+        with open(RECOGNITION_RESULTS_CSV, mode='w', newline='') as csvfile:
+            fieldnames = ['filename', 'name']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
 
     for filename in filenames:
-        # Check if the result already exists in CSV
         if filename in existing_results:
             results.append({
                 'filename': filename,
@@ -83,16 +86,16 @@ def recognize():
             })
             continue
 
-        file_path = os.path.join(RECOGNIZING_FOLDER, filename)
-        
+        file_path = os.path.join('../faces', filename)
+
         if not os.path.exists(file_path):
             print(f"File {filename} does not exist in the upload folder.")
             results.append({
                 'filename': filename,
-                'names': []  # No names found due to missing file
+                'names': []
             })
             continue
-        
+
         try:
             image = face_recognition.load_image_file(file_path)
             locs = face_recognition.face_locations(image)
@@ -112,21 +115,25 @@ def recognize():
                 'filename': filename,
                 'names': image_results
             })
+
         except Exception as e:
             print(f"Error processing {filename}: {e}")
             results.append({
                 'filename': filename,
-                'names': []  # No names found due to processing error
+                'names': []
             })
-    
-    # Save new recognition results to CSV
+
     with open(RECOGNITION_RESULTS_CSV, 'a', newline='') as csvfile:
         fieldnames = ['filename', 'name']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         for result in results:
-            if result['filename'] not in existing_results:  # Only save new results
-                for name in result['names']:
-                    writer.writerow({'filename': result['filename'], 'name': name})
+            print(result['filename'], result['names'], existing_results, results)
+            if result['filename'] not in existing_results:
+                if not result['names']:
+                    writer.writerow({'filename': result['filename'], 'name': ''})
+                else:
+                    writer.writerow({'filename': result['filename'], 'name': result['names']})
+
 
     return jsonify(results)
 

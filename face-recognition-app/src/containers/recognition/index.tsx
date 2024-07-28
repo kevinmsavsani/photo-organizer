@@ -21,7 +21,7 @@ const Results = () => {
         const recognizeResponse = await axios.get<string[]>(
           "http://127.0.0.1:5001/files/recognizing"
         );
-        setImages(recognizeResponse.data);
+        setImages(recognizeResponse.data.map(val => `recognizing/${val}`));
       } catch (error) {
         console.error("Error fetching files:", error);
         toast.error("Failed to fetch images. Check console for details.");
